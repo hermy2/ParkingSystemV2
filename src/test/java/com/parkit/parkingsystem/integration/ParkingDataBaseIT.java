@@ -86,8 +86,6 @@ public class ParkingDataBaseIT {
         Date ticketExitTime = ticketDAO.getTicket("ABCDEF").getOutTime();
            
         assertNotNull(fareExit);
-        //assertNotNull(ticketExitTime); 
-        //assertEquals(0, fareExit); //less than 30min so price will be 0
         
     }
     
