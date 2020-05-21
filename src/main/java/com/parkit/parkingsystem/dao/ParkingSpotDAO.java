@@ -4,12 +4,15 @@ import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
+import com.parkit.parkingsystem.model.Ticket;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 
 public class ParkingSpotDAO {
     private static final Logger logger = LogManager.getLogger("ParkingSpotDAO");
@@ -17,6 +20,7 @@ public class ParkingSpotDAO {
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     public int getNextAvailableSlot(ParkingType parkingType){
+System.out.println("ENTER GET NEW");
         Connection con = null;
         int result=-1;
         try {
@@ -38,7 +42,7 @@ public class ParkingSpotDAO {
     }
 
     public boolean updateParking(ParkingSpot parkingSpot){
-        //update the availability fo that parking slot
+        //update the availability for that parking slot
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
@@ -55,5 +59,29 @@ public class ParkingSpotDAO {
             dataBaseConfig.closeConnection(con);
         }
     }
+    
+  //check for recurring client
+    public boolean checkClientExist(Ticket ticket) {
+    	Connection con = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.GET_REGISTRATION_EXIST); 
+            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER
+            //ps.setInt(1,ticket.getId());
+            ps.setInt(1,ticket.getParkingSpot().getId());
+            ps.setString(2, ticket.getVehicleRegNumber());
+            return ps.execute();
+        }catch (Exception ex){
+            logger.error("Error updating registration",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+            return false;
+        }
+	}
+    
 
 }
+
+
+
+

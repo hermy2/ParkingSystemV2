@@ -1,22 +1,39 @@
 package com.parkit.parkingsystem;
 
-import com.parkit.parkingsystem.constants.Fare;
-import com.parkit.parkingsystem.constants.ParkingType;
-import com.parkit.parkingsystem.model.ParkingSpot;
-import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.service.FareCalculatorService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.dao.ParkingSpotDAO;
+import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.model.ParkingSpot;
+import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.service.FareCalculatorService;
+
+@ExtendWith(MockitoExtension.class)
 public class FareCalculatorServiceTest {
 
-    private static FareCalculatorService fareCalculatorService;
     private Ticket ticket;
+    
+    @Mock
+	private static ParkingSpotDAO parkingSpotDAO;
+    private static TicketDAO ticketDAO;
+	@InjectMocks
+	private static FareCalculatorService fareCalculatorService;
 
     @BeforeAll
     private static void setUp() {
@@ -81,6 +98,21 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
+    
+    @Test
+    public void calculateFareWithLessThanHalfHourParkingTime() {
+    	Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  30 * 60 * 1000) );//Less thqn 30 minutes parking: Free parking
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        assertEquals( (0.5 * Fare.FREE_FARE) , ticket.getPrice() );
+    	
+    }
 
     @Test
     public void calculateFareBikeWithLessThanOneHourParkingTime(){
@@ -95,6 +127,7 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket);
         assertEquals((0.75 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice() );
     }
+    
 
     @Test
     public void calculateFareCarWithLessThanOneHourParkingTime(){
@@ -123,5 +156,19 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket);
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
+    
+    @Test
+	public void discountCarUser() {
+    	 ticket.setId(1);
+    	 ticket.setVehicleRegNumber("ABCDEF");
+    	 ticket.setPrice(45.0);
+    	 when(parkingSpotDAO.checkClientExist(any(Ticket.class))).thenReturn(true);
+ 		double fare = fareCalculatorService.userDiscount(ticket);
+		assertEquals(42.75, fare);   
+
+	}
+ 
 
 }
+
+
