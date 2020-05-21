@@ -1,0 +1,14 @@
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/constants/Fare.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/util/InputReaderUtil.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/service/FareCalculatorService.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/config/DataBaseConfig.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/model/Ticket.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/service/ParkingService.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/dao/TicketDAO.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/dao/ParkingSpotDAO.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/model/ClientRegistration.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/model/ParkingSpot.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/App.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/constants/ParkingType.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/service/InteractiveShell.java
+/Users/hermy/Desktop/Git Projects/version2/src/main/java/com/parkit/parkingsystem/constants/DBConstants.java
